@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="list-group">
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "myform",enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+        <hr />
+        <a href="#" class="list-group-item active">
+            <h2 class="list-group-item-heading">导入数据...</h2>
+        </a>
+        <hr />
+        <div class="content">
+            <input type="file" name="files" class="btn btn-danger" />
+            <br />
+            <input type="submit" name="btnIn" id="btnIn" value="导 入 <<" class="btn btn-success" />
+        </div>
+        <br />
+        if (!string.IsNullOrEmpty(ViewBag.Success))
+        {
+        <div class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert">
+                &times;
+            </a>@ViewBag.Success
+        </div>
+        }
+        if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert">
+                &times;
+            </a>@ViewBag.Error
+        </div>
+        }
+    }
+    <div id="myLoadingElement" style="display: none;">
+        <img src="~/Content/images/loading.gif" alt="Loading..." />
+    </div>
+</div>
+<div class="list-group">
+    <hr />
+    <a href="#" class="list-group-item active">
+        <h2 class="list-group-item-heading">导出数据...</h2>
+    </a>
+    <hr />
+    <form action="" class="form-horizontal" role="form" id="exportForm" method="POST">
+        <div class="form-group">
+            <label for="beginDateTime" class="col-md-1">起始时间:</label>
+            <div class="input-group date form_datetime col-md-4" data-link-field="beginDateTime" data-date-format="yyyy MM dd -p HH:ii">
+                <input class="form-control" size="16" type="text" value="" readonly>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+            </div>
+            <input type="hidden" id="beginDateTime" value="" /><br />
+            <br />
+        </div>
+        <div class="form-group">
+            <label for="endDateTime" class="col-md-1">结束时间:</label>
+            <div class="input-group date form_datetime col-md-4" data-link-field="endDateTime" data-date-format="yyyy MM dd -p HH:ii">
+                <input class="form-control" size="16" type="text" value="" readonly>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+            </div>
+            <input type="hidden" id="endDateTime" value="" /><br />
+            <br />
+        </div>
+        <div>
+            <input type="button" name="btnOut" id="btnOut" value="导 出 >>" class="btn btn-success " />
+        </div>
+    </form>
+    <br />
+    <div class="alert alert-warning " id="myAlert" style="display:none">
+        <a href="#" class="close" data-dismiss="alert">
+            &times;
+        </a>
+    </div>
+    <script type="text/javascript">
+        $("#myform").submit(function (e) {
+            $("#myLoadingElement").show();
+        });
+        $('.form_datetime').datetimepicker({
+            language: 'zh-CN',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+
+        $("#btnOut").click(function () {
+            $("#myAlert").hide();
+            $("#myAlert").html("")
+            //if (!$("#beginDateTime").val()) {
+            //    $("#myAlert").html("<strong>起始时间不能为空</strong>")
+            //    $("#myAlert").show();
+            //    return false;
+            //}
+            //if (!$("#endDateTime").val()) {
+            //    $("#myAlert").html("<strong>结束时间不能为空</strong>")
+            //    $("#myAlert").show();
+            //    return false;
+            //}
+            //if ($("#beginDateTime").val() > $("#endDateTime").val())
+            //{
+            //    $("#myAlert").html("<strong>起始时间不能大于结束时间</strong>")
+            //    $("#myAlert").show();
+            //    return false;
+            //}
+            //var postdata = { beginDateTime: "2014-10-11 12:23:12" };
+            //$.ajax({
+            //    dataType: "JSON",
+            //    contentType: "application/json",
+            //    type: "POST",
+            //    url: "/Home/ExportToExcel/",
+            //    data: JSON.stringify(postdata),
+            //    success: function () {
+            //        alert(1);
+            //    }
+            //});
+            var form = $('#exportForm');
+            form.attr("action", "/Home/ExportToExcel/");
+            form.submit();
+        });
+    </script>
+</div>
